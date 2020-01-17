@@ -1,0 +1,29 @@
+{
+  "builders": [
+    {
+      "type": "docker",
+      "image": "debian:buster-slim",
+      "commit": true,
+      "changes": [
+        "LABEL maintainer=\"Jeremie CUADRADO\"",
+        "VOLUME /sys/fs/cgroup",
+        "CMD [\"/lib/systemd/systemd\"]"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "build-systemd.sh"
+    },{
+      "type": "shell",
+      "script": "add_python3.sh"
+    },
+    {
+      "type": "ansible",
+      "user": "root",
+      "galaxy_file": "requirements.yml",
+      "playbook_file": "provision.yml"
+    }
+  ]
+}
