@@ -1,4 +1,8 @@
 {
+  "variables": {
+    "docker_user": "{{ env `DOCKER_USER`}}",
+    "docker_password": "{{ env `DOCKER_PASSWORD`}}"
+  },
   "builders": [
     {
       "type": "docker",
@@ -25,5 +29,20 @@
       "galaxy_file": "requirements.yml",
       "playbook_file": "provision.yml"
     }
+  ],
+  "post-processors": [
+	[
+	  	{
+  		"type": "docker-tag",
+  		"repository": "redbeard28/debian",
+  		"tag": "buster-basetools"
+		},
+		{
+		"type": "docker-push",
+		"login_username": "{{ user `docker_user`}}",
+		"login_password": "{{ user `docker_password`}}",
+		"login": true
+		}
+	]
   ]
 }
