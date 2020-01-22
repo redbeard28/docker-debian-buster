@@ -6,23 +6,12 @@
   "builders": [
     {
       "type": "docker",
-      "image": "debian:buster-slim",
+      "image": "redbeard28/debian:buster-python3",
       "commit": true,
-      "changes": [
-        "LABEL maintainer=\"Jeremie CUADRADO\"",
-        "VOLUME /sys/fs/cgroup",
-        "CMD [\"/lib/systemd/systemd\"]"
-      ]
+      "run_command": ["-d", "-i", "-t", "{{.Image}}", "/bin/sh"]
     }
   ],
   "provisioners": [
-    {
-      "type": "shell",
-      "script": "build-systemd.sh"
-    },{
-      "type": "shell",
-      "script": "add_python3.sh"
-    },
     {
       "type": "ansible",
       "user": "root",
@@ -37,12 +26,12 @@
   		"repository": "redbeard28/debian",
   		"tag": "buster-basetools"
 		},
-		{
-		"type": "docker-push",
-		"login_username": "{{ user `docker_user`}}",
-		"login_password": "{{ user `docker_password`}}",
-		"login": true
-		}
-	]
+        {
+          "type": "docker-push",
+          "login_username": "{{ user `docker_user`}}",
+          "login_password": "{{ user `docker_password`}}",
+          "login": true
+        }
+     ]
   ]
 }
